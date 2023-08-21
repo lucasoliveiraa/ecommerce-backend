@@ -7,9 +7,9 @@ export class CityController {
   constructor(private readonly cityService: CityService) {}
 
   @Get('/:stateId')
-  async getAllCitiesByState(
+  async getAllCitiesByStateId(
     @Param('stateId') stateId: number,
   ): Promise<CityEntity[]> {
-    return this.cityService.getAllCitiesByState(stateId);
+    return this.cityService.getAllCitiesByStateId(stateId);
   }
 }

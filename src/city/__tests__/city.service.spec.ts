@@ -1,37 +1,59 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { stateMock } from '../../state/__mocks__/state.mock';
-import { CityController } from '../city.controller';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { CacheService } from '../../cache/cache.service';
+import { Repository } from 'typeorm';
 import { CityService } from '../city.service';
+import { CityEntity } from '../entities/city.entity';
 import { cityMock } from '../__mocks__/city.mock';
 
-describe('CityController', () => {
-  let controller: CityController;
-  let cityService: CityService;
+describe('CityService', () => {
+  let service: CityService;
+  let cityRepository: Repository<CityEntity>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
+        CityService,
         {
-          provide: CityService,
+          provide: CacheService,
           useValue: {
-            getAllCitiesByStateId: jest.fn().mockResolvedValue([cityMock]),
+            getCache: jest.fn().mockResolvedValue([cityMock]),
+          },
+        },
+        {
+          provide: getRepositoryToken(CityEntity),
+          useValue: {
+            findOne: jest.fn().mockResolvedValue(cityMock),
           },
         },
       ],
-      controllers: [CityController],
     }).compile();
 
-    controller = module.get<CityController>(CityController);
-    cityService = module.get<CityService>(CityService);
+    service = module.get<CityService>(CityService);
+    cityRepository = module.get<Repository<CityEntity>>(
+      getRepositoryToken(CityEntity),
+    );
   });
 
   it('should be defined', () => {
-    expect(controller).toBeDefined();
-    expect(cityService).toBeDefined();
+    expect(service).toBeDefined();
+    expect(cityRepository).toBeDefined();
   });
 
-  it('should return city Entity in getAllCitiesByStateId', async () => {
-    const city = await controller.getAllCitiesByStateId(stateMock.id);
+  it('should return findOne City', async () => {
+    const city = await service.findCityById(cityMock.id);
+
+    expect(city).toEqual(cityMock);
+  });
+
+  it('should return error findOne not found', async () => {
+    jest.spyOn(cityRepository, 'findOne').mockResolvedValue(undefined);
+
+    expect(service.findCityById(cityMock.id)).rejects.toThrowError();
+  });
+
+  it('should return Cities in getAllCitiesByStateId', async () => {
+    const city = await service.getAllCitiesByStateId(cityMock.id);
 
     expect(city).toEqual([cityMock]);
   });
