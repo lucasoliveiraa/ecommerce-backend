@@ -1,8 +1,8 @@
-import { Roles } from 'src/decorators/roles.decorator';
+import { Roles } from '../decorators/roles.decorator';
 import { CategoryService } from './category.service';
 import { ReturnCategory } from './dto/return-category.dto';
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { UserType } from 'src/user/enum/user-type.enum';
+import { UserType } from '../user/enum/user-type.enum';
 import { CategoryEntity } from './entities/category.entity';
 import { CreateCategory } from './dto/create-category.dto';
 
