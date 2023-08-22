@@ -12,6 +12,8 @@ import { CacheModule } from './cache/cache.module';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './guards/roles.guard';
+import { CategoryModule } from './category/category.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -37,6 +39,8 @@ import { RolesGuard } from './guards/roles.guard';
     CacheModule,
     AuthModule,
     JwtModule,
+    CategoryModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [
