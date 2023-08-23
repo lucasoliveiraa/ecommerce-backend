@@ -5,10 +5,10 @@ import { UserEntity } from '../entities/user.entity';
 import { UserType } from '../enum/user-type.enum';
 import { UserService } from '../user.service';
 import { createUserMock } from '../__mocks__/createUser.mock';
-// import {
-//   updatePasswordInvalidMock,
-//   updatePasswordMock,
-// } from '../__mocks__/update-user.mock';
+import {
+  updatePasswordInvalidMock,
+  updatePasswordMock,
+} from '../__mocks__/update-user.mock';
 import { userEntityMock } from '../__mocks__/user.mock';
 
 describe('UserService', () => {
@@ -102,35 +102,35 @@ describe('UserService', () => {
     expect(spy.mock.calls[0][0].typeUser).toEqual(UserType.User);
   });
 
-  // it('should return user if user not exist and user Admin', async () => {
-  //   const spy = jest.spyOn(userRepository, 'save');
-  //   jest.spyOn(userRepository, 'findOne').mockResolvedValue(undefined);
+  it('should return user if user not exist and user Admin', async () => {
+    const spy = jest.spyOn(userRepository, 'save');
+    jest.spyOn(userRepository, 'findOne').mockResolvedValue(undefined);
 
-  //   await service.createUser(createUserMock, UserType.Admin);
+    await service.createUser(createUserMock, UserType.Admin);
 
-  //   expect(spy.mock.calls[0][0].typeUser).toEqual(UserType.Admin);
-  // });
+    expect(spy.mock.calls[0][0].typeUser).toEqual(UserType.Admin);
+  });
 
-  // it('should return user in update password', async () => {
-  //   const user = await service.updatePasswordUser(
-  //     updatePasswordMock,
-  //     userEntityMock.id,
-  //   );
+  it('should return user in update password', async () => {
+    const user = await service.updatePasswordUser(
+      updatePasswordMock,
+      userEntityMock.id,
+    );
 
-  //   expect(user).toEqual(userEntityMock);
-  // });
+    expect(user).toEqual(userEntityMock);
+  });
 
-  // it('should return invalid password in error', async () => {
-  //   expect(
-  //     service.updatePasswordUser(updatePasswordInvalidMock, userEntityMock.id),
-  //   ).rejects.toThrowError();
-  // });
+  it('should return invalid password in error', async () => {
+    expect(
+      service.updatePasswordUser(updatePasswordInvalidMock, userEntityMock.id),
+    ).rejects.toThrowError();
+  });
 
-  // it('should return error in user not exist', async () => {
-  //   jest.spyOn(userRepository, 'findOne').mockResolvedValue(undefined);
+  it('should return error in user not exist', async () => {
+    jest.spyOn(userRepository, 'findOne').mockResolvedValue(undefined);
 
-  //   expect(
-  //     service.updatePasswordUser(updatePasswordMock, userEntityMock.id),
-  //   ).rejects.toThrowError();
-  // });
+    expect(
+      service.updatePasswordUser(updatePasswordMock, userEntityMock.id),
+    ).rejects.toThrowError();
+  });
 });
