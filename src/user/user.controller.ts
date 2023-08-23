@@ -1,8 +1,12 @@
-import { UserEntity } from './entities/user.entity';
-import { Body, Controller, Post, Get, Param } from '@nestjs/common';
-import { CreateUserDto } from './dto/createUser.dto';
+import { Body, Controller, Post, Get, Param, Patch } from '@nestjs/common';
 import { UserService } from './user.service';
+import { UserEntity } from './entities/user.entity';
+import { CreateUserDto } from './dto/createUser.dto';
 import { ReturnUserDto } from './dto/returnUser.dto';
+import { UpdatePassword } from './dto/updateUser.dto';
+import { UserId } from '../decorators/user-id.decorator';
+import { UserType } from './enum/user-type.enum';
+import { Roles } from 'src/decorators/roles.decorator';
 
 @Controller('user')
 export class UserController {
@@ -13,6 +17,7 @@ export class UserController {
     return this.userService.createUser(createUser);
   }
 
+  @Roles(UserType.Admin)
   @Get()
   async getAllUser(): Promise<ReturnUserDto[]> {
     return (await this.userService.getAllUser()).map(
@@ -20,10 +25,20 @@ export class UserController {
     );
   }
 
+  @Roles(UserType.Admin)
   @Get('/:userId')
   async getUserById(@Param('userId') userId: number): Promise<ReturnUserDto> {
     return new ReturnUserDto(
       await this.userService.getUserByIdUsingRelations(userId),
     );
+  }
+
+  @Roles(UserType.Admin, UserType.User)
+  @Patch('/:userId')
+  async updatePasswordUser(
+    @Body() updatePassword: UpdatePassword,
+    @UserId() userId: number,
+  ): Promise<UserEntity> {
+    return this.userService.updatePasswordUser(updatePassword, userId);
   }
 }
