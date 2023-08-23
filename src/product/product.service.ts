@@ -4,7 +4,7 @@ import { DeleteResult, Repository } from 'typeorm';
 import { ProductEntity } from './entities/product.entity';
 import { CategoryService } from '../category/category.service';
 import { CreateProduct } from './dto/create-product.dto';
-import { UpdateProduct } from './dto/update-procut.dto';
+import { UpdateProduct } from './dto/update-product.dto';
 
 @Injectable()
 export class ProductService {

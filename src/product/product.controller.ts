@@ -14,7 +14,7 @@ import { CreateProduct } from './dto/create-product.dto';
 import { Roles } from '../decorators/roles.decorator';
 import { UserType } from '../user/enum/user-type.enum';
 import { DeleteResult } from 'typeorm';
-import { UpdateProduct } from './dto/update-procut.dto';
+import { UpdateProduct } from './dto/update-product.dto';
 
 @Roles(UserType.Admin, UserType.User)
 @Controller('product')
