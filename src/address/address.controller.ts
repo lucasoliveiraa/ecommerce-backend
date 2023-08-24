@@ -1,4 +1,4 @@
-import { CreateAddressDto } from './dto/createAddress.dto';
+import { CreateAddress } from './dto/createAddress.dto';
 import { Controller, Post, Body, Get } from '@nestjs/common';
 import { AddressService } from './address.service';
 import { AddressEntity } from './entities/address.entity';
@@ -15,9 +15,9 @@ export class AddressController {
   @Post()
   async createAddress(
     @UserId() userId: number,
-    @Body() createAddressDto: CreateAddressDto,
+    @Body() createAddress: CreateAddress,
   ): Promise<AddressEntity> {
-    return this.addressService.createAddress(createAddressDto, userId);
+    return this.addressService.createAddress(createAddress, userId);
   }
 
   @Get()
