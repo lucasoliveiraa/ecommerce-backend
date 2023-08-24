@@ -6,7 +6,7 @@ import { UserEntity } from '../user/entities/user.entity';
 import { ReturnLogin } from './dto/returnLogin.dto';
 import { ReturnUserDto } from '../user/dto/returnUser.dto';
 import { LoginPayload } from './dto/loginPayload.dto';
-import { validatePassword } from 'src/utils/password';
+import { validatePassword } from '../utils/password';
 
 @Injectable()
 export class AuthService {
