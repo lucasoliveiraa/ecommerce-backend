@@ -10,7 +10,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-// import { OrderEntity } from '../../order/entities/order.entity';
+import { OrderEntity } from '../../order/entities/order.entity';
 
 @Entity({ name: 'address' })
 export class AddressEntity {
@@ -46,6 +46,6 @@ export class AddressEntity {
   @JoinColumn({ name: 'city_id', referencedColumnName: 'id' })
   city?: CityEntity;
 
-  // @OneToMany(() => OrderEntity, order => order.address)
-  // orders?: OrderEntity[];
+  @OneToMany(() => OrderEntity, order => order.address)
+  orders?: OrderEntity[];
 }
