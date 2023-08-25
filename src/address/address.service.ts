@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateAddressDto } from './dto/createAddress.dto';
+import { CreateAddress } from './dto/createAddress.dto';
 import { UserService } from './../user/user.service';
 import { AddressEntity } from './entities/address.entity';
 import { CityService } from '../city/city.service';
@@ -16,7 +16,7 @@ export class AddressService {
   ) {}
 
   async createAddress(
-    createAddressDto: CreateAddressDto,
+    createAddressDto: CreateAddress,
     userId: number,
   ): Promise<AddressEntity> {
     await this.userService.findUserById(userId);
