@@ -8,13 +8,13 @@ import { ProductService } from '../product.service';
 import { createProductMock } from '../__mocks__/create-product.mock';
 import { productMock } from '../__mocks__/product.mock';
 import { returnDeleteMock } from '../../__mocks__/return-delete.mock';
-// import { CorreiosService } from '../../correios/correios.service';
+import { CorreiosService } from '../../correios/correios.service';
 
 describe('ProductService', () => {
   let service: ProductService;
   let productRepository: Repository<ProductEntity>;
   let categoryService: CategoryService;
-  // let correiosService: CorreiosService;
+  let correiosService: CorreiosService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -26,12 +26,12 @@ describe('ProductService', () => {
             findCategoryById: jest.fn().mockResolvedValue(categoryMock),
           },
         },
-        // {
-        //   provide: CorreiosService,
-        //   useValue: {
-        //     priceDelivery: jest.fn().mockResolvedValue({}),
-        //   },
-        // },
+        {
+          provide: CorreiosService,
+          useValue: {
+            priceDelivery: jest.fn().mockResolvedValue({}),
+          },
+        },
         {
           provide: getRepositoryToken(ProductEntity),
           useValue: {
@@ -47,7 +47,7 @@ describe('ProductService', () => {
 
     service = module.get<ProductService>(ProductService);
     categoryService = module.get<CategoryService>(CategoryService);
-    // correiosService = module.get<CorreiosService>(CorreiosService);
+    correiosService = module.get<CorreiosService>(CorreiosService);
     productRepository = module.get<Repository<ProductEntity>>(
       getRepositoryToken(ProductEntity),
     );
@@ -57,7 +57,7 @@ describe('ProductService', () => {
     expect(service).toBeDefined();
     expect(categoryService).toBeDefined();
     expect(productRepository).toBeDefined();
-    // expect(correiosService).toBeDefined();
+    expect(correiosService).toBeDefined();
   });
 
   it('should return all products', async () => {
