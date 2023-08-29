@@ -1,28 +1,62 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
+import { DeleteResult } from 'typeorm';
 import { Roles } from '../decorators/roles.decorator';
-import { CategoryService } from './category.service';
-import { ReturnCategory } from './dto/return-category.dto';
-import { Body, Controller, Get, Post } from '@nestjs/common';
 import { UserType } from '../user/enum/user-type.enum';
-import { CategoryEntity } from './entities/category.entity';
+import { CategoryService } from './category.service';
 import { CreateCategory } from './dto/create-category.dto';
+import { ReturnCategory } from './dto/return-category.dto';
+import { UpdateCategory } from './dto/update-category.dto';
+import { CategoryEntity } from './entities/category.entity';
 
-@Roles(UserType.Admin, UserType.User)
+@Roles(UserType.Admin, UserType.Root, UserType.User)
 @Controller('category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Get()
   async findAllCategories(): Promise<ReturnCategory[]> {
-    return (await this.categoryService.findAllCategories()).map(
-      category => new ReturnCategory(category),
-    );
+    return this.categoryService.findAllCategories();
   }
 
-  @Roles(UserType.Admin)
+  @Roles(UserType.Admin, UserType.Root)
   @Post()
   async createCategory(
     @Body() createCategory: CreateCategory,
   ): Promise<CategoryEntity> {
     return this.categoryService.createCategory(createCategory);
+  }
+
+  @Roles(UserType.Admin, UserType.Root)
+  @Delete(':categoryId')
+  async deleteCategory(
+    @Param('categoryId') categoryId: number,
+  ): Promise<DeleteResult> {
+    return this.categoryService.deleteCategory(categoryId);
+  }
+
+  @Roles(UserType.Admin, UserType.Root)
+  @Put(':categoryId')
+  async editCategory(
+    @Param('categoryId') categoryId: number,
+    @Body() updateCategory: UpdateCategory,
+  ): Promise<CategoryEntity> {
+    return this.categoryService.editCategory(categoryId, updateCategory);
+  }
+
+  @Get(':categoryId')
+  async findCategoryById(
+    @Param('categoryId') categoryId: number,
+  ): Promise<ReturnCategory> {
+    return new ReturnCategory(
+      await this.categoryService.findCategoryById(categoryId, true),
+    );
   }
 }
