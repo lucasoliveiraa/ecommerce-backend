@@ -13,18 +13,18 @@ export class UpdateProduct {
   @IsString()
   image: string;
 
-  // @IsNumber()
-  // weight?: number;
+  @IsNumber()
+  weight?: number;
 
-  // @IsNumber()
-  // length?: number;
+  @IsNumber()
+  length?: number;
 
-  // @IsNumber()
-  // height?: number;
+  @IsNumber()
+  height?: number;
 
-  // @IsNumber()
-  // width?: number;
+  @IsNumber()
+  width?: number;
 
-  // @IsNumber()
-  // diameter?: number;
+  @IsNumber()
+  diameter?: number;
 }
