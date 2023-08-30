@@ -1,14 +1,14 @@
 import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
-import { OrderService } from './order.service';
-import { CreateOrderDTO } from './dto/create-order.dto';
-import { UserId } from '../decorators/user-id.decorator';
-import { OrderEntity } from './entities/order.entity';
 import { Response } from 'express';
 import { Roles } from '../decorators/roles.decorator';
 import { UserType } from '../user/enum/user-type.enum';
+import { UserId } from '../decorators/user-id.decorator';
+import { CreateOrderDTO } from './dto/create-order.dto';
+import { OrderEntity } from './entities/order.entity';
+import { OrderService } from './order.service';
 import { ReturnOrderDTO } from './dto/return-order.dto';
 
-@Roles(UserType.Admin, UserType.User)
+@Roles(UserType.Admin, UserType.Root, UserType.User)
 @Controller('order')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
@@ -17,7 +17,7 @@ export class OrderController {
   async createOrder(
     @Body() createOrderDTO: CreateOrderDTO,
     @UserId() userId: number,
-  ) {
+  ): Promise<OrderEntity> {
     return this.orderService.createOrder(createOrderDTO, userId);
   }
 
