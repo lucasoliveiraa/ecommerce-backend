@@ -6,6 +6,7 @@ import {
   Post,
   Param,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ReturnProduct } from './dto/return-product.dto';
@@ -16,7 +17,7 @@ import { UserType } from '../user/enum/user-type.enum';
 import { DeleteResult } from 'typeorm';
 import { UpdateProduct } from './dto/update-product.dto';
 import { ReturnPriceDeliveryDto } from './dto/return-price-delivery.dto';
-// import { Pagination } from '../dto/pagination.dto';
+import { Pagination } from '../dto/pagination.dto';
 
 @Controller('product')
 export class ProductController {
@@ -30,19 +31,21 @@ export class ProductController {
     );
   }
 
-  // @Roles(UserType.Admin, UserType.Root, UserType.User)
-  // @Get('/page')
-  // async findAllPage(
-  //   @Query('search') search?: string,
-  //   @Query('size') size?: number,
-  //   @Query('page') page?: number,
-  // ): Promise<Pagination<ReturnProduct[]>> {
-  //   return this.productService.findAllPage(search, size, page);
-  // }
+  @Roles(UserType.Admin, UserType.Root, UserType.User)
+  @Get('/page')
+  async findAllPage(
+    @Query('search') search?: string,
+    @Query('size') size?: number,
+    @Query('page') page?: number,
+  ): Promise<Pagination<ReturnProduct[]>> {
+    return this.productService.findAllPage(search, size, page);
+  }
 
   @Roles(UserType.Admin, UserType.Root, UserType.User)
   @Get('/:productId')
-  async findProductById(@Param('productId') productId): Promise<ReturnProduct> {
+  async findProductById(
+    @Param('productId') productId: number,
+  ): Promise<ReturnProduct> {
     return new ReturnProduct(
       await this.productService.findProductById(productId, true),
     );

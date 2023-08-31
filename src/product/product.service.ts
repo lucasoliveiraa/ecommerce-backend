@@ -6,7 +6,7 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, In, Repository } from 'typeorm';
+import { DeleteResult, ILike, In, Repository } from 'typeorm';
 import { ProductEntity } from './entities/product.entity';
 import { CategoryService } from '../category/category.service';
 import { CreateProduct } from './dto/create-product.dto';
@@ -16,10 +16,10 @@ import { SizeProductDTO } from '../correios/dto/size-product.dto';
 import { CorreiosService } from '../correios/correios.service';
 import { CdServiceEnum } from '../correios/enums/cd-service.enum';
 import { ReturnPriceDeliveryDto } from './dto/return-price-delivery.dto';
-// import { Pagination, PaginationMeta } from '../dto/pagination.dto';
+import { Pagination, PaginationMeta } from '../dto/pagination.dto';
 
-// const DEFAULT_PAGE_SIZE = 10;
-// const FIRST_PAGE = 1;
+const DEFAULT_PAGE_SIZE = 10;
+const FIRST_PAGE = 1;
 
 @Injectable()
 export class ProductService {
@@ -29,40 +29,39 @@ export class ProductService {
 
     @Inject(forwardRef(() => CategoryService))
     private readonly categoryService: CategoryService,
-
     private readonly correiosService: CorreiosService,
   ) {}
 
-  // async findAllPage(
-  //   search?: string,
-  //   size = DEFAULT_PAGE_SIZE,
-  //   page = FIRST_PAGE,
-  // ): Promise<Pagination<ProductEntity[]>> {
-  //   const skip = (page - 1) * size;
-  //   let findOptions = {};
-  //   if (search) {
-  //     findOptions = {
-  //       where: {
-  //         name: ILike(`%${search}%`),
-  //       },
-  //     };
-  //   }
-  //   const [products, total] = await this.productRepository.findAndCount({
-  //     ...findOptions,
-  //     take: size,
-  //     skip,
-  //   });
+  async findAllPage(
+    search?: string,
+    size = DEFAULT_PAGE_SIZE,
+    page = FIRST_PAGE,
+  ): Promise<Pagination<ProductEntity[]>> {
+    const skip = (page - 1) * size;
+    let findOptions = {};
+    if (search) {
+      findOptions = {
+        where: {
+          name: ILike(`%${search}%`),
+        },
+      };
+    }
+    const [products, total] = await this.productRepository.findAndCount({
+      ...findOptions,
+      take: size,
+      skip,
+    });
 
-  //   return new Pagination(
-  //     new PaginationMeta(
-  //       Number(size),
-  //       total,
-  //       Number(page),
-  //       Math.ceil(total / size),
-  //     ),
-  //     products,
-  //   );
-  // }
+    return new Pagination(
+      new PaginationMeta(
+        Number(size),
+        total,
+        Number(page),
+        Math.ceil(total / size),
+      ),
+      products,
+    );
+  }
 
   async findAll(
     productId?: number[],
