@@ -1,4 +1,4 @@
-import { Pagination } from 'src/dto/pagination.dto';
+import { Pagination } from '../../dto/pagination.dto';
 import { categoryMock } from '../../category/__mocks__/category.mock';
 import { ProductEntity } from '../entities/product.entity';
 

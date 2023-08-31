@@ -26,7 +26,7 @@ export class CategoryController {
     return this.categoryService.findAllCategories();
   }
 
-  @Roles(UserType.Admin, UserType.Root)
+  @Roles(UserType.Admin, UserType.Root, UserType.Root)
   @Post()
   async createCategory(
     @Body() createCategory: CreateCategory,
