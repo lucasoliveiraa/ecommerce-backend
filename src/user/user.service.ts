@@ -19,20 +19,22 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async createUser(createUser: CreateUserDto): Promise<UserEntity> {
-    const user = await this.findUserByEmail(createUser.email).catch(
+  async createUser(
+    createUserDto: CreateUserDto,
+    userType?: number,
+  ): Promise<UserEntity> {
+    const user = await this.findUserByEmail(createUserDto.email).catch(
       () => undefined,
     );
 
     if (user) {
       throw new BadGatewayException('Email registered in system');
     }
-
-    const passwordHashed = await createPasswordHashed(createUser.password);
+    const passwordHashed = await createPasswordHashed(createUserDto.password);
 
     return this.userRepository.save({
-      ...createUser,
-      typeUser: UserType.User,
+      ...createUserDto,
+      typeUser: userType ? userType : UserType.User,
       password: passwordHashed,
     });
   }

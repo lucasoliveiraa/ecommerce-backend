@@ -12,12 +12,18 @@ import { Roles } from '../decorators/roles.decorator';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Roles(UserType.Root)
+  @Post('/admin')
+  async createAdmin(@Body() createUser: CreateUserDto): Promise<UserEntity> {
+    return this.userService.createUser(createUser, UserType.Admin);
+  }
+
   @Post()
   async createUser(@Body() createUser: CreateUserDto): Promise<UserEntity> {
     return this.userService.createUser(createUser);
   }
 
-  @Roles(UserType.Admin)
+  @Roles(UserType.Admin, UserType.Root)
   @Get('/all')
   async getAllUser(): Promise<ReturnUserDto[]> {
     return (await this.userService.getAllUser()).map(
@@ -25,7 +31,7 @@ export class UserController {
     );
   }
 
-  @Roles(UserType.Admin)
+  @Roles(UserType.Admin, UserType.Root)
   @Get('/:userId')
   async getUserById(@Param('userId') userId: number): Promise<ReturnUserDto> {
     return new ReturnUserDto(
@@ -33,7 +39,7 @@ export class UserController {
     );
   }
 
-  @Roles(UserType.Admin, UserType.User)
+  @Roles(UserType.Admin, UserType.Root, UserType.User)
   @Patch('/:userId')
   async updatePasswordUser(
     @Body() updatePassword: UpdatePassword,
