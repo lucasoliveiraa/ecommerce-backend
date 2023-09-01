@@ -7,7 +7,9 @@ import { CreateOrderDTO } from './dto/create-order.dto';
 import { OrderEntity } from './entities/order.entity';
 import { OrderService } from './order.service';
 import { ReturnOrderDTO } from './dto/return-order.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Order')
 @Roles(UserType.Admin, UserType.Root, UserType.User)
 @Controller('order')
 export class OrderController {

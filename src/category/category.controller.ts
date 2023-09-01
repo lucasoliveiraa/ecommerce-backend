@@ -15,7 +15,9 @@ import { CreateCategory } from './dto/create-category.dto';
 import { ReturnCategory } from './dto/return-category.dto';
 import { UpdateCategory } from './dto/update-category.dto';
 import { CategoryEntity } from './entities/category.entity';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Category')
 @Roles(UserType.Admin, UserType.Root, UserType.User)
 @Controller('category')
 export class CategoryController {

@@ -17,7 +17,9 @@ import { ReturnCart } from './dto/return-cart.dto';
 import { DeleteResult } from 'typeorm';
 import { Response } from 'express';
 import { UpdateCart } from './dto/update-cart.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Cart')
 @Roles(UserType.User, UserType.Admin, UserType.Root)
 @Controller('cart')
 export class CartController {
